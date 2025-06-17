@@ -1,0 +1,57 @@
+CREATE DATABASE CollegeDB;
+USE CollegeDB;
+
+CREATE TABLE Student (
+    StudentID INT PRIMARY KEY,
+    StudentName VARCHAR(50),
+    StudentSurname VARCHAR(50),
+    StudentNumber VARCHAR(10)
+);
+
+CREATE TABLE Lecturer (
+    LecturerID INT PRIMARY KEY,
+    LecturerName VARCHAR(50),
+    LecturerSurname VARCHAR(50)
+);
+
+CREATE TABLE Tutorial (
+    TutorialID INT PRIMARY KEY,
+    TutorailDate DATE,
+    TutorialTime TIME,
+    TutorialDuration INT,
+    LecturerID INT,
+    StudentID INT,
+    FOREIGN KEY (LecturerID) REFERENCES Lecturer(LecturerID),
+    FOREIGN KEY (StudentID) REFERENCES Student(StudentID)
+);
+
+INSERT INTO Student (StudentID, StudentName, StudentSurname, StudentNumber) VALUES
+(1, 'Debbie', 'Theart', '123456'),
+(2, 'Thomas', 'Duncan', '654321');
+
+INSERT INTO Lecturer (LecturerID, LecturerName, LecturerSurname) VALUES
+(1, 'Zintle', 'Nukani'),
+(2, 'Ravi', 'Maharaj');
+
+INSERT INTO Tutorial (TutorialID, TutorialDate, TutorialTime, TutorialDuration, LecturerID, StudentID) VALUES
+(1, '2025-01-15', '09:00', 180, 2, 1),
+(2, '2025-01-18', '15:00', 240, 1, 2),
+(3, '2025-01-20', '10:00', 180, 2, 1),
+(4, '2025-01-21', '11:00', 180, 2, 1);
+
+SELECT * FROM Tutorial
+WHERE TutorialDate BETWEEN '2025-01-16' AND '2025-01-20';
+
+SELECT s.StudentName, s.StudentSurname, COUNT(t.TutorialID) as TotalTutorials
+FROM Student s
+LEFT JOIN Tutorial t ON s.StudentID = t.StudentID
+GROUP BY s.StudentID, s.StudentName, s.StudentSurname
+ORDER BY TotalTutorials DESC;
+
+CREATE VIEW StudentLecturer2 AS
+SELECT DISTINCT s.StudentName, s.StudentSurname
+FROM Student s
+JOIN Tutorial t ON s.StudentID = t.StudentID
+JOIN Lecturer l ON t.LecturerID = l.LecturerID
+WHERE l.LecturerID = 2
+ORDER BY s.StudentSurname ASC;

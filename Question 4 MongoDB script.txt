@@ -1,0 +1,11 @@
+use clients_st12345678
+
+db.clients.insertMany([
+  { "Client Name": "Debbie", "Client Surname": "Theart", "Client DOB": ISODate("1980-03-17") },
+  { "Client Name": "Thomas", "Client Surname": "Duncan", "Client DOB": ISODate("1976-08-12") }
+])
+
+db.clients.find()
+
+
+db.clients.find({ "Client DOB": { $gt: ISODate("1979-01-12") } })
